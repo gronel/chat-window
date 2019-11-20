@@ -31,10 +31,36 @@
 </template>
 
 <script>
+  import Connection from "Connection"
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data: function () {
+    return {
+      isDisconnecting: false
+    }
+  },
+  components: {Connection},
+  computed: {
+    isConnected: function () {
+      return this.$store.getters.getConnected
+    }
+  },
+  watch: {
+    isConnected: function () {
+      this.isDisconnecting = false
+    }
+  },
+  methods: {
+    showConnectionWindow () {
+      this.$bus.$emit('show-connect-to-chat-dialog-event')
+    },
+    disconnectFromChat () {
+      this.isDisconnecting = true
+      this.$bus.$emit('disconnect-event')
+    }
   }
 }
 </script>
